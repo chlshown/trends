@@ -7,7 +7,8 @@ const startMonth = 0 // 起始月份 30天
 const endMonth = 12 // 结束月份 12个月
 const baseLineKeyword1 = 'Purple'
 const baseLineKeyword2 = 'Blue'
-const tableName = 'Thai_JapMovies'
+const fromTableName = 'Thai_JapMovies'
+const toTableName = 'Thai_JapMovies'
 // const tableName = 'KoreanMovies'
 
 const getTrendsByKeyword1 = async (keyword, dataIndex, startTime, endTime, monthIdex) => {
@@ -22,9 +23,9 @@ const getTrendsByKeyword1 = async (keyword, dataIndex, startTime, endTime, month
       const temp = result[i] - 0
       const baseValue = result[0] - 0
       if (temp > 1) {
-        addRecord(keyword[i - 1], dataIndex, temp, 'success', baseLineKeyword1, baseValue, startTimeFormat, endTimeFormat)
+        addRecord(toTableName,keyword[i - 1], dataIndex, temp, 'success', baseLineKeyword1, baseValue, startTimeFormat, endTimeFormat)
       } else if (baseValue <= 1) {
-        addRecord(keyword[i - 1], dataIndex, temp, 're', baseLineKeyword1, baseValue, startTimeFormat, endTimeFormat)
+        addRecord(toTableName, keyword[i - 1], dataIndex, temp, 're', baseLineKeyword1, baseValue, startTimeFormat, endTimeFormat)
         repeatData.push(keyword[i - 1])
       } else {
         let ifBaseMax = true
@@ -34,12 +35,12 @@ const getTrendsByKeyword1 = async (keyword, dataIndex, startTime, endTime, month
           }
         }
         if (!ifBaseMax && temp <= 1) {
-          addRecord(keyword[i - 1], dataIndex, temp, 'small', baseLineKeyword1, baseValue, startTimeFormat, endTimeFormat)
+          addRecord(toTableName, keyword[i - 1], dataIndex, temp, 'small', baseLineKeyword1, baseValue, startTimeFormat, endTimeFormat)
           // repeatData.push(keyword[i - 1])
         } else if (ifBaseMax && temp <= 1) {
-          addRecord(keyword[i - 1], dataIndex, temp, 'small', baseLineKeyword1, baseValue, startTimeFormat, endTimeFormat)
+          addRecord(toTableName, keyword[i - 1], dataIndex, temp, 'small', baseLineKeyword1, baseValue, startTimeFormat, endTimeFormat)
         } else {
-          addRecord(keyword[i - 1], dataIndex, temp, 'unknown', baseLineKeyword1, baseValue, startTimeFormat, endTimeFormat)
+          addRecord(toTableName, keyword[i - 1], dataIndex, temp, 'unknown', baseLineKeyword1, baseValue, startTimeFormat, endTimeFormat)
           repeatData.push(keyword[i - 1])
         }
       }
@@ -184,7 +185,7 @@ const main = async () => {
   console.log('开始运行程序')
   //  await sleep(1000 * 60 * 60 * 4)
   connection.connect()
-  const keywrodArr = await getKey(tableName)
+  const keywrodArr = await getKey(fromTableName)
   console.log(`开始运行程序，待查询数据:${keywrodArr.length}条`)
 
   for (let i = startMonth; i < endMonth; i++) {

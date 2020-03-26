@@ -67,8 +67,8 @@ const getKey = async (tableName) => {
   })
 }
 
-const addRecord = (keyword, groupIndex, value, state, base, baseValue, start, end) => {
-  const addSql = `INSERT INTO records (keyword, groupIndex, value, state, base, baseValue, start, end) VALUES(?,?,?,?,?,?,?,?); `
+const addRecord = (tableNmae, keyword, groupIndex, value, state, base, baseValue, start, end) => {
+  const addSql = `INSERT INTO ${tableNmae} (keyword, groupIndex, value, state, base, baseValue, start, end) VALUES(?,?,?,?,?,?,?,?); `
   var addSqlParams = [keyword, groupIndex, value, state, base, baseValue, start, end]
   // 增
   connection.query(addSql, addSqlParams, function (err, result) {
