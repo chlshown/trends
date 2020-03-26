@@ -7,7 +7,7 @@ const startMonth = 0 // 起始月份 30天
 const endMonth = 12 // 结束月份 12个月
 const baseLineKeyword1 = 'Purple'
 const baseLineKeyword2 = 'Blue'
-const tableName = 'Offers'
+const tableName = 'Thai_JapMovies'
 // const tableName = 'KoreanMovies'
 
 const getTrendsByKeyword1 = async (keyword, dataIndex, startTime, endTime, monthIdex) => {
