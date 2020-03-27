@@ -5,31 +5,9 @@
   "author": "ray.chen",
   "private": true,
   "scripts": {
-    "start": "serverIndex=1 node test.js",
-    "dev": "NODE_ENV=dev PORT=8080 nodemon app.js",
-    "lint": "eslint ./ --fix",
-    "generate": "nuxt generate",
-    "prebuild": "echo \" \\033[35m[开始执行build命令] \\033[0m \" ",
-    "build": "npm run nuxtbuild",
-    "postbuild": "npm run deletelicense && echo \" \\033[35m[build命令执行完毕] \\033[0m \" ",
-    "prenuxtbuild": " echo \" \\033[35m [1.Nuxt Build] \\033[0m \"",
-    "nuxtbuild": "nuxt build",
-    "predeletelicense": "echo \" \\033[35m[2.删除license文件] \\033[0m \"",
-    "deletelicense": "rm ./_nuxt/dist/client/LICENSES"
+    "start": "serverIndex=1 node test.js"
   },
   "dependencies": {
     "google-trends-api": "^4.9.0"
-  },
-  "devDependencies": {
-    "babel-eslint": "^10.0.1",
-    "babel-preset-env": "^1.6.0",
-    "babel-preset-stage-0": "^6.24.1",
-    "babel-register": "^6.26.0",
-    "chalk": "^2.4.2",
-    "less": "^3.8.1",
-    "less-loader": "^4.1.0",
-    "nodemon": "^1.18.9",
-    "style-loader": "^0.22.1",
-    "vue-style-loader": "^4.1.1"
   }
 }
