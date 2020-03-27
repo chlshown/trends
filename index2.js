@@ -142,6 +142,7 @@ const getMonthData1 = async (keywrodArr, startTime, endTime, monthIndex, startDa
             console.log(`尝试跳过该词组,monthIndex:${monthIndex} dataIndex:${i}`)
             checkTag = true // 改种情况仅尝试一次
             main(monthIndex, i + 1)
+            reutrn
           }
           return
         }
