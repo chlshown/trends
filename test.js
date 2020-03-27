@@ -20,3 +20,5 @@ const getTrendsByKeyword1 = async () => {
 // getTrendsByKeyword1()
 const [a, ...b] = [1,2,3,4,5]
 console.log(b)
+var arg = process.argv[process.argv.length - 1]
+console.log(arg)

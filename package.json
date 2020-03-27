@@ -5,9 +5,9 @@
   "author": "ray.chen",
   "private": true,
   "scripts": {
+    "start": "serverIndex=1 node test.js",
     "dev": "NODE_ENV=dev PORT=8080 nodemon app.js",
     "lint": "eslint ./ --fix",
-    "start": "cross-env NODE_ENV=production node app.js",
     "generate": "nuxt generate",
     "prebuild": "echo \" \\033[35m[开始执行build命令] \\033[0m \" ",
     "build": "npm run nuxtbuild",
@@ -39,6 +39,7 @@
     "koa-compose": "^4.1.0",
     "koa-router": "^7.4.0",
     "koa-static": "^5.0.0",
+    "minimist": "^1.2.5",
     "mysql": "^2.18.1",
     "nuxt": "^2.3.4",
     "papaparse": "^5.1.1",
