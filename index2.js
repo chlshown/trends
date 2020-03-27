@@ -142,12 +142,13 @@ const getMonthData1 = async (keywrodArr, startTime, endTime, monthIndex, startDa
             console.log(`尝试跳过该词组,monthIndex:${monthIndex} dataIndex:${i}`)
             checkTag = true // 改种情况仅尝试一次
             main(monthIndex, i + 1)
-            return
+            return false
           }
-          return
+          return false
         }
         await sleep(waitingTime)
       }
+      return true
     }
     // const testFile = path.join(__dirname, './test.csv')
     // wb.write(testFile)
@@ -213,7 +214,11 @@ const main = async (startMonth, startDataIndex) => {
     const endTime = new Date(Date.now() - (i * 30 * 24 * 60 * 60 * 1000))
 
     console.log(`开始第${i + 1}个月数据第一次删选`)
-    await getMonthData1(keywrodArr, startTime, endTime, i, startDataIndex)
+    const res = await getMonthData1(keywrodArr, startTime, endTime, i, startDataIndex)
+    if (!res){
+      console.log('放弃本次运行')
+      return
+    }
     console.log(`开始第${i + 1}个月数据第二次删选，总数据量${repeatData.length}`)
     await getMonthData2(repeatData, startTime, endTime, i)
     console.log(`第${i + 1}个月数据运行完毕 运行时间${getCostTime(monthStartTime)}分钟`)
