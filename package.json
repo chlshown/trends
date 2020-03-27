@@ -8,6 +8,7 @@
     "start": "serverIndex=1 node test.js"
   },
   "dependencies": {
-    "google-trends-api": "^4.9.0"
+    "google-trends-api": "^4.9.0",
+    "mysql": "^2.18.1"
   }
 }
