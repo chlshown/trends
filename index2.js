@@ -8,7 +8,7 @@ const sourceIndex = 2
 const lenIndex = 4 //  一次调用长度
 const startMonth = 0 // 起始月份 30天
 const endMonth = 12 // 结束月份 12个月
-const startDataIndex = 0 // 开始调用的词组
+const startDataIndex = 300 // 开始调用的词组
 const baseLineKeyword1 = 'Purple'
 const baseLineKeyword2 = 'Blue'
 
@@ -23,9 +23,25 @@ const getTrendsByKeyword1 = async (keyword, dataIndex, startTime, endTime, month
   try {
     const startTimeFormat = `${startTime.getFullYear()}-${startTime.getMonth() + 1}-${startTime.getDate()}`
     const endTimeFormat = `${endTime.getFullYear()}-${endTime.getMonth() + 1}-${endTime.getDate()}`
-    const yearData = await Promise.all([googleTrends.interestOverTime({ keyword: [baseLineKeyword1, ...keyword], startTime, endTime, geo: 'VN' })])
+    let yearData = await Promise.all([googleTrends.interestOverTime({ keyword: [baseLineKeyword1, ...keyword], startTime, endTime, geo: 'VN' })])
     // console.log(yearData)
-    const result = JSON.parse(yearData[0]).default.averages
+    let result = []
+    if(!yearData || !yearData[0] || !yearData[0].default || !yearData[0].default.averages) {
+      while(1){
+        let [first, ...newKeywords] = keyword
+        keyword = [...newKeywords]
+        if(keyword.length === 0){
+          break
+        } else if(!yearData || !yearData[0] || !yearData[0].default || !yearData[0].default.averages){
+          yearData = await Promise.all([googleTrends.interestOverTime({ keyword: [baseLineKeyword1, ...newKeywords], startTime, endTime, geo: 'VN' })])
+        } else {
+          result = JSON.parse(yearData[0]).default.averages
+          break
+        }
+      }
+    } else {
+      result = JSON.parse(yearData[0]).default.averages
+    }
 
     for (let i = 1; i < keyword.length + 1; i++) {
       const temp = result[i] - 0
@@ -222,6 +238,7 @@ const main = async (startMonth, startDataIndex) => {
     console.log(`开始第${i + 1}个月数据第二次删选，总数据量${repeatData.length}`)
     await getMonthData2(repeatData, startTime, endTime, i)
     console.log(`第${i + 1}个月数据运行完毕 运行时间${getCostTime(monthStartTime)}分钟`)
+    startDataIndex = 0
   }
   console.log(`全部运行完毕 运行时间${getCostTime(mainStart)}分钟`)
   connection.end()
