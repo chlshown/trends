@@ -148,8 +148,8 @@ const getMonthData1 = async (keywrodArr, startTime, endTime, monthIndex, startDa
         }
         await sleep(waitingTime)
       }
-      return true
     }
+    return true
     // const testFile = path.join(__dirname, './test.csv')
     // wb.write(testFile)
   } catch (error) {
