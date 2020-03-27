@@ -114,7 +114,7 @@ const getMonthData1 = async (keywrodArr, startTime, endTime, monthIndex, startDa
     for (let i = startDataIndex; i < keywrodArr.length;) {
       console.log(`开始调用${monthIndex + 1}-${i}-A keyword ${keywrodArr[i]}`)
       const keyArr = []
-      const checkTag = false
+      let checkTag = false
 
       // 获取一组长度位lenIndex的group作为比较组
       for (let j = i; j < i + lenIndex && j < keywrodArr.length; j++) {
