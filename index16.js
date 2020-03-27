@@ -8,6 +8,7 @@ const sourceIndex = 16
 const lenIndex = 4 //  一次调用长度
 const startMonth = 0 // 起始月份 30天
 const endMonth = 12 // 结束月份 12个月
+const startDataIndex = 0 // 开始调用的词组
 const baseLineKeyword1 = 'Purple'
 const baseLineKeyword2 = 'Blue'
 
@@ -18,7 +19,7 @@ const fromTableName = configItem.sourceTabelName
 const toTableName = configItem.recordTableName
 // const tableName = 'KoreanMovies'
 
-const getTrendsByKeyword1 = async (keyword, dataIndex, startTime, endTime, monthIdex) => {
+const getTrendsByKeyword1 = async (keyword, dataIndex, startTime, endTime, monthIdex, startMonth, startDataIndex) => {
   try {
     const startTimeFormat = `${startTime.getFullYear()}-${startTime.getMonth() + 1}-${startTime.getDate()}`
     const endTimeFormat = `${endTime.getFullYear()}-${endTime.getMonth() + 1}-${endTime.getDate()}`
@@ -105,14 +106,17 @@ const sleep = (ms) => {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
 
-const getMonthData1 = async (keywrodArr, startTime, endTime, monthIndex) => {
+const getMonthData1 = async (keywrodArr, startTime, endTime, monthIndex, startDataIndex) => {
   try {
     let waitingTime = 1000
     let failTime = 0
 
-    for (let i = 0; i < keywrodArr.length;) {
+    for (let i = startDataIndex; i < keywrodArr.length;) {
       console.log(`开始调用${monthIndex + 1}-${i}-A keyword ${keywrodArr[i]}`)
       const keyArr = []
+      let checkTag = false
+
+      // 获取一组长度位lenIndex的group作为比较组
       for (let j = i; j < i + lenIndex && j < keywrodArr.length; j++) {
         keyArr.push(keywrodArr[j])
       }
@@ -127,12 +131,18 @@ const getMonthData1 = async (keywrodArr, startTime, endTime, monthIndex) => {
         waitingTime = 1000
         i += lenIndex
         failTime = 0
+        checkTag = false
       } else {
         failTime++
         console.log(`调用失败${monthIndex + 1}-${i}-A，重新尝试${failTime}`)
         waitingTime *= 2
-        if (waitingTime > 60 * 1000 * 10) {
+        if (waitingTime > 60 * 1000 * 2) {
           console.log(`当前数据调用失败${monthIndex + 1}-${i}-A，放弃尝试,总运行时间${getCostTime(mainStart)}分钟`)
+          if(!checkTag) {
+            console.log(`尝试跳过该词组,monthIndex:${monthIndex} dataIndex:${i}`)
+            checkTag = true // 改种情况仅尝试一次
+            main(monthIndex, i + 1)
+          }
           return
         }
         await sleep(waitingTime)
@@ -188,7 +198,7 @@ const getCostTime = (start) => {
   return Math.floor((new Date() - start) / 1000 / 60)
 }
 
-const main = async () => {
+const main = async (startMonth, startDataIndex) => {
   console.log('开始运行程序')
   //  await sleep(1000 * 60 * 60 * 4)
   connection.connect()
@@ -200,8 +210,9 @@ const main = async () => {
     const monthStartTime = new Date()
     const startTime = new Date(Date.now() - ((i + 1) * 30 * 24 * 60 * 60 * 1000))
     const endTime = new Date(Date.now() - (i * 30 * 24 * 60 * 60 * 1000))
+
     console.log(`开始第${i + 1}个月数据第一次删选`)
-    await getMonthData1(keywrodArr, startTime, endTime, i)
+    await getMonthData1(keywrodArr, startTime, endTime, i, startDataIndex)
     console.log(`开始第${i + 1}个月数据第二次删选，总数据量${repeatData.length}`)
     await getMonthData2(repeatData, startTime, endTime, i)
     console.log(`第${i + 1}个月数据运行完毕 运行时间${getCostTime(monthStartTime)}分钟`)
@@ -213,4 +224,4 @@ const main = async () => {
 const mainStart = new Date()
 let repeatData = []
 
-main()
+main(startMonth, startDataIndex)

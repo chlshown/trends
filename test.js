@@ -1,17 +1,10 @@
-const fun1 = () => {
-    try {
-        if(i > 10) return
-        console.log(`before ${i}`)
-        i++
-        throw(1)
-        console.log(`after ${i}`)
-        i++
-    } catch (error) {
-        console.log(`catch ${i}`)
-        i++
-        fun1()
+var interfaces = require('os').networkInterfaces();
+for(var devName in interfaces){
+    var iface = interfaces[devName];
+    for(var i=0;i<iface.length;i++){
+        var alias = iface[i];
+        if(alias.family === 'IPv4' && alias.address !== '127.0.0.1' && !alias.internal){
+            return alias.address;
+        }
     }
 }
-
-let i = 1
-fun1()
