@@ -4,7 +4,8 @@ const {addRecord, addThird, getKey, connection} = require('./db.js')
 const {source} = require('./config.js')
 
 // config
-const sourceIndex = process.argv[process.argv.length - 1]
+
+const sourceIndex = Number(process.argv[process.argv.length - 1])
 const lenIndex = 4 //  一次调用长度
 const startMonth = 0 // 起始月份 30天
 const endMonth = 12 // 结束月份 12个月
